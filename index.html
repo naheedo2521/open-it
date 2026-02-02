@@ -124,23 +124,19 @@ window.onload = function() {
     setTimeout(() => heart.remove(), 6000);
   }, 400);
 
-  // NO button
+  // NO button with random playful messages
   const noBtn = document.getElementById("noBtn");
-  let noClickCount = 0;
   const noMessages = [
     "Better say YES because you didn't ask me 😤",
     "Babe stop !!!",
     "Testing my patience 🙂🔪",
-    "Seriously??!!!"
+    "Seriously??!!!",
+    "Not happening today 😏"
   ];
 
   noBtn.addEventListener("click", () => {
-    if(noClickCount < noMessages.length){
-      noBtn.innerText = noMessages[noClickCount];
-      noClickCount++;
-    } else {
-      noBtn.innerText = "Stop it 😌";
-    }
+    const msg = noMessages[Math.floor(Math.random() * noMessages.length)];
+    noBtn.innerText = msg;
     moveButton();
   });
 
