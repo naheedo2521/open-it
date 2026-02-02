@@ -13,6 +13,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
 
     .card {
@@ -23,6 +24,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       max-width: 350px;
       z-index: 2;
+      position: relative;
     }
 
     h1 { color: #ff4d6d; }
@@ -37,13 +39,11 @@
       cursor: pointer;
       background: #ff4d6d;
       color: white;
+      position: relative;
     }
 
-    button:hover {
-      background: #e63950;
-    }
+    button:hover { background: #e63950; }
 
-    /* Hearts */
     .heart {
       position: absolute;
       color: #ff4d6d;
@@ -56,16 +56,19 @@
       100% { transform: translateY(-10vh); opacity: 0; }
     }
 
-    /* Hidden success page */
     .success {
       display: none;
       text-align: center;
       color: white;
+      z-index: 2;
     }
 
-    .success h1 {
-      font-size: 40px;
-    }
+    .success h1 { font-size: 40px; }
+    .secret { font-size: 20px; margin-top: 20px; }
+
+    /* NO button style */
+    #noBtn { background-color: #ff9a00; }
+    #noBtn:hover { background-color: #ff7f00; }
   </style>
 </head>
 <body>
@@ -77,7 +80,7 @@
 
 <!-- MAIN CARD -->
 <div class="card" id="mainCard">
-  <h1>Hey ❤️</h1>
+  <h1>Hey ❤️ <span id="theirName">Alex</span></h1>
   <p>
     Every moment with you feels special.<br>
     So I just wanted to ask…
@@ -85,24 +88,54 @@
   <h2>Will you be my Valentine? 💌</h2>
 
   <button onclick="sayYes()">YES 💖</button>
-  <button onclick="sayYes()">YES (shy 😳)</button>
+  <button id="noBtn">NO 😳</button>
 </div>
 
 <!-- SUCCESS PAGE -->
 <div class="success" id="successPage">
   <h1>YAYYYYY 🥹💖</h1>
   <h2>I KNEW IT!!!</h2>
-  <p>This just made my whole day 💕</p>
+  <p class="secret">You make my heart so happy, <span id="theirName2">Alex</span>! 💕</p>
 </div>
 
 <script>
+  // YES button function
   function sayYes() {
     document.getElementById("mainCard").style.display = "none";
     document.getElementById("successPage").style.display = "block";
     document.getElementById("music").play();
   }
 
-  // Hearts generator
+  // NO button playful behavior
+  const noBtn = document.getElementById("noBtn");
+  let noClickCount = 0;
+  const noMessages = [
+    "Better say YES because you didn't ask me 😤",
+    "Babe stop !!!",
+    "Testing my patience 🙂🔪",
+    "Seriously??!!!"
+  ];
+
+  noBtn.addEventListener("click", () => {
+    if(noClickCount < noMessages.length){
+      noBtn.innerText = noMessages[noClickCount];
+      noClickCount++;
+      moveButton();
+    } else {
+      noBtn.innerText = "Stop it 😌";
+      moveButton();
+    }
+  });
+
+  function moveButton(){
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+
+  // Floating hearts
   setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -110,9 +143,14 @@
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (15 + Math.random() * 20) + "px";
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 6000);
   }, 400);
+
+  // Name customization
+  const theirName = "Akshu"; // <-- Replace with your special person's name
+  document.getElementById("theirName").innerText = theirName;
+  document.getElementById("theirName2").innerText = theirName;
+
 </script>
 
 </body>
