@@ -1,84 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>For You ❤️</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      max-width: 350px;
-      z-index: 2;
-      position: relative;
-    }
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  max-width: 350px;
+  z-index: 2;
+  position: relative;
+}
 
-    h1 { color: #ff4d6d; }
-    h2 { color: #e63950; }
+h1 { color: #ff4d6d; }
+h2 { color: #e63950; }
 
-    button {
-      margin: 10px;
-      padding: 12px 22px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #ff4d6d;
-      color: white;
-      position: relative;
-    }
+button {
+  margin: 10px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #ff4d6d;
+  color: white;
+  position: relative;
+}
 
-    button:hover { background: #e63950; }
+button:hover { background: #e63950; }
 
-    .heart {
-      position: absolute;
-      color: #ff4d6d;
-      font-size: 20px;
-      animation: floatUp 6s linear infinite;
-    }
+.heart {
+  position: absolute;
+  color: #ff4d6d;
+  font-size: 20px;
+  animation: floatUp 6s linear infinite;
+}
 
-    @keyframes floatUp {
-      0% { transform: translateY(100vh); opacity: 1; }
-      100% { transform: translateY(-10vh); opacity: 0; }
-    }
+@keyframes floatUp {
+  0% { transform: translateY(100vh); opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
 
-    .success {
-      display: none;
-      text-align: center;
-      color: white;
-      z-index: 2;
-    }
+.success {
+  display: none;
+  text-align: center;
+  color: white;
+  z-index: 2;
+}
 
-    .success h1 { font-size: 40px; }
-    .secret { font-size: 20px; margin-top: 20px; }
+.success h1 { font-size: 40px; }
+.secret { font-size: 20px; margin-top: 20px; }
 
-    /* NO button style */
-    #noBtn { background-color: #ff9a00; }
-    #noBtn:hover { background-color: #ff7f00; }
-  </style>
+#noBtn { background-color: #ff9a00; }
+#noBtn:hover { background-color: #ff7f00; }
+
+.confetti {
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  padding: 3px 6px;
+  background: rgba(255, 0, 100, 0.8);
+  border-radius: 5px;
+  pointer-events: none;
+  transform: rotate(0deg);
+  opacity: 1;
+  z-index: 3;
+  white-space: nowrap;
+}
+</style>
 </head>
 <body>
 
-<!-- MUSIC -->
 <audio id="music" loop>
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- MAIN CARD -->
 <div class="card" id="mainCard">
   <h1>Hey ❤️ <span id="theirName">Alex</span></h1>
   <p>
@@ -91,7 +103,6 @@
   <button id="noBtn">NO 😳</button>
 </div>
 
-<!-- SUCCESS PAGE -->
 <div class="success" id="successPage">
   <h1>YAYYYYY 🥹💖</h1>
   <h2>I KNEW IT!!!</h2>
@@ -99,58 +110,98 @@
 </div>
 
 <script>
-  // YES button function
-  function sayYes() {
-    document.getElementById("mainCard").style.display = "none";
-    document.getElementById("successPage").style.display = "block";
-    document.getElementById("music").play();
+// YES button
+function sayYes() {
+  document.getElementById("mainCard").style.display = "none";
+  document.getElementById("successPage").style.display = "block";
+  document.getElementById("music").play();
+  startConfetti(); // start confetti when YES clicked
+}
+
+// NO button
+const noBtn = document.getElementById("noBtn");
+let noClickCount = 0;
+const noMessages = [
+  "Better say YES because you didn't ask me 😤",
+  "Babe stop !!!",
+  "Testing my patience 🙂🔪",
+  "Seriously??!!!"
+];
+
+noBtn.addEventListener("click", () => {
+  if(noClickCount < noMessages.length){
+    noBtn.innerText = noMessages[noClickCount];
+    noClickCount++;
+    moveButton();
+  } else {
+    noBtn.innerText = "Stop it 😌";
+    moveButton();
   }
+});
 
-  // NO button playful behavior
-  const noBtn = document.getElementById("noBtn");
-  let noClickCount = 0;
-  const noMessages = [
-    "Better say YES because you didn't ask me 😤",
-    "Babe stop !!!",
-    "Testing my patience 🙂🔪",
-    "Seriously??!!!"
-  ];
+function moveButton(){
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const padding = 20;
+  const x = Math.random() * (window.innerWidth - btnWidth - padding*2) + padding;
+  const y = Math.random() * (window.innerHeight - btnHeight - padding*2) + padding;
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
 
-  noBtn.addEventListener("click", () => {
-    if(noClickCount < noMessages.length){
-      noBtn.innerText = noMessages[noClickCount];
-      noClickCount++;
-      moveButton();
-    } else {
-      noBtn.innerText = "Stop it 😌";
-      moveButton();
-    }
+// Floating hearts
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (15 + Math.random() * 20) + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 400);
+
+// Name
+const theirName = "Jamie"; // <-- replace with your Valentine’s name
+document.getElementById("theirName").innerText = theirName;
+document.getElementById("theirName2").innerText = theirName;
+
+// Confetti messages
+const confettiMessages = [
+  "You’re amazing ❤️",
+  "Be mine 💌",
+  "Love you 😘",
+  "Forever us 💕",
+  "You + Me 😍"
+];
+
+function startConfetti() {
+  const confettiCount = 30; // number of confetti strips
+  for(let i=0; i<confettiCount; i++){
+    setTimeout(() => createConfetti(), i*150); // stagger for effect
+  }
+}
+
+function createConfetti(){
+  const confetti = document.createElement("div");
+  confetti.className = "confetti";
+  confetti.innerText = confettiMessages[Math.floor(Math.random() * confettiMessages.length)];
+  confetti.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  confetti.style.top = "-30px";
+  confetti.style.transform = `rotate(${Math.random()*360}deg)`;
+  document.body.appendChild(confetti);
+
+  const duration = 4000 + Math.random()*2000;
+  confetti.animate([
+    { transform: confetti.style.transform, top: "-30px", opacity: 1 },
+    { transform: `rotate(${Math.random()*360}deg)`, top: window.innerHeight + "px", opacity: 0 }
+  ], {
+    duration: duration,
+    easing: "linear"
   });
 
-  function moveButton(){
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-  }
-
-  // Floating hearts
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (15 + Math.random() * 20) + "px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 400);
-
-  // Name customization
-  const theirName = "Akshu"; // <-- Replace with your special person's name
-  document.getElementById("theirName").innerText = theirName;
-  document.getElementById("theirName2").innerText = theirName;
-
+  setTimeout(() => confetti.remove(), duration);
+}
 </script>
 
 </body>
