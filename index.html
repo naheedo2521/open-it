@@ -49,6 +49,7 @@ button:hover { background: #e63950; }
   color: #ff4d6d;
   font-size: 20px;
   animation: floatUp 6s linear infinite;
+  z-index: 1;
 }
 
 @keyframes floatUp {
@@ -60,13 +61,13 @@ button:hover { background: #e63950; }
   display: none;
   text-align: center;
   color: white;
-  z-index: 2;
+  z-index: 4;
 }
 
 .success h1 { font-size: 40px; }
 .secret { font-size: 20px; margin-top: 20px; }
 
-#noBtn { background-color: #ff9a00; }
+#noBtn { background-color: #ff9a00; z-index: 3; }
 #noBtn:hover { background-color: #ff7f00; }
 
 .confetti {
@@ -75,12 +76,9 @@ button:hover { background: #e63950; }
   font-weight: bold;
   color: white;
   padding: 3px 6px;
-  background: rgba(255, 0, 100, 0.8);
   border-radius: 5px;
   pointer-events: none;
-  transform: rotate(0deg);
-  opacity: 1;
-  z-index: 3;
+  z-index: 5; /* make confetti appear above everything */
   white-space: nowrap;
 }
 </style>
@@ -93,10 +91,7 @@ button:hover { background: #e63950; }
 
 <div class="card" id="mainCard">
   <h1>Hey ❤️ <span id="theirName">Alex</span></h1>
-  <p>
-    Every moment with you feels special.<br>
-    So I just wanted to ask…
-  </p>
+  <p>Every moment with you feels special.<br>So I just wanted to ask…</p>
   <h2>Will you be my Valentine? 💌</h2>
 
   <button onclick="sayYes()">YES 💖</button>
@@ -110,15 +105,20 @@ button:hover { background: #e63950; }
 </div>
 
 <script>
+// Name
+const theirName = "Jamie"; // <-- Replace with your Valentine’s name
+document.getElementById("theirName").innerText = theirName;
+document.getElementById("theirName2").innerText = theirName;
+
 // YES button
 function sayYes() {
   document.getElementById("mainCard").style.display = "none";
   document.getElementById("successPage").style.display = "block";
   document.getElementById("music").play();
-  startConfetti(); // start confetti when YES clicked
+  startConfetti();
 }
 
-// NO button
+// NO button with playful messages
 const noBtn = document.getElementById("noBtn");
 let noClickCount = 0;
 const noMessages = [
@@ -132,77 +132,13 @@ noBtn.addEventListener("click", () => {
   if(noClickCount < noMessages.length){
     noBtn.innerText = noMessages[noClickCount];
     noClickCount++;
-    moveButton();
   } else {
     noBtn.innerText = "Stop it 😌";
-    moveButton();
   }
+  moveButton();
 });
 
 function moveButton(){
   const btnWidth = noBtn.offsetWidth;
   const btnHeight = noBtn.offsetHeight;
-  const padding = 20;
-  const x = Math.random() * (window.innerWidth - btnWidth - padding*2) + padding;
-  const y = Math.random() * (window.innerHeight - btnHeight - padding*2) + padding;
-  noBtn.style.position = "absolute";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-}
-
-// Floating hearts
-setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (15 + Math.random() * 20) + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}, 400);
-
-// Name
-const theirName = "Jamie"; // <-- replace with your Valentine’s name
-document.getElementById("theirName").innerText = theirName;
-document.getElementById("theirName2").innerText = theirName;
-
-// Confetti messages
-const confettiMessages = [
-  "You’re amazing ❤️",
-  "Be mine 💌",
-  "Love you 😘",
-  "Forever us 💕",
-  "You + Me 😍"
-];
-
-function startConfetti() {
-  const confettiCount = 30; // number of confetti strips
-  for(let i=0; i<confettiCount; i++){
-    setTimeout(() => createConfetti(), i*150); // stagger for effect
-  }
-}
-
-function createConfetti(){
-  const confetti = document.createElement("div");
-  confetti.className = "confetti";
-  confetti.innerText = confettiMessages[Math.floor(Math.random() * confettiMessages.length)];
-  confetti.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  confetti.style.top = "-30px";
-  confetti.style.transform = `rotate(${Math.random()*360}deg)`;
-  document.body.appendChild(confetti);
-
-  const duration = 4000 + Math.random()*2000;
-  confetti.animate([
-    { transform: confetti.style.transform, top: "-30px", opacity: 1 },
-    { transform: `rotate(${Math.random()*360}deg)`, top: window.innerHeight + "px", opacity: 0 }
-  ], {
-    duration: duration,
-    easing: "linear"
-  });
-
-  setTimeout(() => confetti.remove(), duration);
-}
-</script>
-
-</body>
-  </html>
+  const padding = 20
